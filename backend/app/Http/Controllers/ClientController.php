@@ -1,5 +1,5 @@
 <?php
-// app/Http/Controllers/ClientController.php
+
 namespace App\Http\Controllers;
 
 use App\Models\Client;
@@ -10,42 +10,66 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::all();
-        return response()->json($clients);
+        return view('clients.index', compact('clients'));
     }
+
+    public function create()
+    {
+        $clientsOptions = Client::pluck('name', 'id'); // Suponiendo que tienes un modelo Client y quieres obtener una lista de clientes
+        return view('clients.create', compact('clientsOptions'));
+    }
+    
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'balance' => 'required|numeric',
+            'id_number' => 'required|unique:clients',
+            // otras reglas de validación
         ]);
-
-        $client = Client::create($request->all());
-        return response()->json($client, 201);
+    
+        Client::create([
+            'name' => $request->input('name'),
+            'surname' => $request->input('surname'),
+            'id_number' => $request->input('id_number'),
+            'bank_balance' => $request->input('bank_balance'),
+            'phone' => $request->input('phone'),
+            'email' => $request->input('email'),
+            'is_active' => $request->input('is_active'),
+        ]);
+    
+        return redirect()->route('clients.index');
     }
+    
 
-    public function show($id)
+    public function edit($id)
     {
         $client = Client::findOrFail($id);
-        return response()->json($client);
+        return view('clients.edit', compact('client'));
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'string|max:255',
-            'balance' => 'numeric',
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'id_number' => 'required|string|max:20|unique:clients,id_number,' . $id,
+            'phone_number' => 'required|string|max:20',
+            'email' => 'required|string|email|max:255|unique:clients,email,' . $id,
+            'bank_balance' => 'required|numeric',
+            'is_active' => 'required|boolean',
         ]);
 
         $client = Client::findOrFail($id);
-        $client->update($request->all());
-        return response()->json($client);
+        $client->update($validated);
+
+        return redirect()->route('clients.index')->with('success', 'Client updated successfully.');
     }
 
     public function destroy($id)
     {
         $client = Client::findOrFail($id);
         $client->delete();
-        return response()->json(null, 204);
+
+        return redirect()->route('clients.index')->with('success', 'Client deleted successfully.');
     }
 }

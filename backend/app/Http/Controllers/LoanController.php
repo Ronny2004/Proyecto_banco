@@ -1,58 +1,49 @@
 <?php
 // app/Http/Controllers/LoanController.php
+
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Loan;
 use App\Models\Client;
-use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
     public function index()
     {
         $loans = Loan::with('client')->get();
-        return response()->json($loans);
+        return view('loans.index', compact('loans'));
+    }
+    
+
+    public function create()
+    {
+        // Obtener todos los clientes para el select
+        $clients = Client::all()->pluck('name', 'id');
+        return view('loans.create', compact('clients'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        // Validar la solicitud
+        $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
-            'amount' => 'required|numeric',
-            'interest_rate' => 'required|numeric',
+            'amount' => 'required|numeric|min:0',
+            'interest_rate' => 'nullable|numeric|min:0',
             'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
-        $loan = Loan::create($request->all());
-        return response()->json($loan, 201);
-    }
-
-    public function show($id)
-    {
-        $loan = Loan::with('client')->findOrFail($id);
-        return response()->json($loan);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'client_id' => 'exists:clients,id',
-            'amount' => 'numeric',
-            'interest_rate' => 'numeric',
-            'start_date' => 'date',
-            'end_date' => 'date',
+        // Crear el préstamo
+        Loan::create([
+            'client_id' => $validated['client_id'],
+            'amount' => $validated['amount'],
+            'interest_rate' => $validated['interest_rate'] ?? 10.00, // Valor por defecto si no se proporciona
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
         ]);
 
-        $loan = Loan::findOrFail($id);
-        $loan->update($request->all());
-        return response()->json($loan);
-    }
-
-    public function destroy($id)
-    {
-        $loan = Loan::findOrFail($id);
-        $loan->delete();
-        return response()->json(null, 204);
+        // Redirigir con mensaje de éxito
+        return redirect()->route('loans.index')->with('success', 'Préstamo creado exitosamente.');
     }
 }
