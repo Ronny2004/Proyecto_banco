@@ -14,7 +14,12 @@
 
                         <div>
                             <x-input-label for="client_id" :value="__('Cliente')" />
-                            <x-select id="client_id" name="client_id" :options="$clients->pluck('name', 'id')" required />
+                            <select id="client_id" name="client_id" required class="block mt-1 w-full">
+                                <option value="">{{ __('Seleccione un cliente') }}</option>
+                                @foreach($clients as $id => $name)
+                                    <option value="{{ $id }}">{{ $name }}</option>
+                                @endforeach
+                            </select>
                             <x-input-error :messages="$errors->get('client_id')" class="mt-2" />
                         </div>
 
@@ -25,21 +30,21 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="interest_rate" :value="__('Interés (%)')" />
-                            <x-text-input id="interest_rate" class="block mt-1 w-full" type="number" name="interest_rate" step="0.01" />
-                            <x-input-error :messages="$errors->get('interest_rate')" class="mt-2" />
-                        </div>
-
-                        <div class="mt-4">
                             <x-input-label for="start_date" :value="__('Fecha de Inicio')" />
-                            <x-text-input id="start_date" class="block mt-1 w-full" type="date" name="start_date" required />
+                            <x-text-input id="start_date" class="block mt-1 w-full" type="date" name="start_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" readonly />
                             <x-input-error :messages="$errors->get('start_date')" class="mt-2" />
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="end_date" :value="__('Fecha de Fin')" />
-                            <x-text-input id="end_date" class="block mt-1 w-full" type="date" name="end_date" required />
-                            <x-input-error :messages="$errors->get('end_date')" class="mt-2" />
+                            <x-input-label for="months" :value="__('Meses')" />
+                            <x-text-input id="months" class="block mt-1 w-full" type="number" name="months" required />
+                            <x-input-error :messages="$errors->get('months')" class="mt-2" />
+                        </div>
+
+                        <!-- Mostrar el interés fijo del 3% -->
+                        <div class="mt-4">
+                            <x-input-label for="interest_rate" :value="__('Interés (%)')" />
+                            <x-text-input id="interest_rate" class="block mt-1 w-full bg-gray-100" type="text" value="3" readonly />
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

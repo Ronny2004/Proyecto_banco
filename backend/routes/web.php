@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/loans/{id}/edit', [LoanController::class, 'edit'])->name('loans.edit');
     Route::put('/loans/{id}', [LoanController::class, 'update'])->name('loans.update');
     Route::delete('/loans/{id}', [LoanController::class, 'destroy'])->name('loans.destroy');
+    Route::get('/loans/manage/{loan}', [LoanController::class, 'manageSingle'])->name('loans.manageSingle');
+
     
     // Rutas para clientes
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');

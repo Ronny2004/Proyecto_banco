@@ -32,10 +32,10 @@
                             <!-- Tarjeta: Clientes -->
                             <a href="{{ url('/clients') }}" class="block p-6 bg-gray-100 dark:bg-gray-700 rounded-lg shadow hover:bg-gray-200 dark:hover:bg-gray-600">
                                 <h4 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                                    Clientes
+                                    Socios
                                 </h4>
                                 <p class="mt-2 text-gray-600 dark:text-gray-400">
-                                    Visualiza y gestiona los detalles de los clientes.
+                                    Visualiza y gestiona los detalles de los Socios.
                                 </p>
                             </a>
 

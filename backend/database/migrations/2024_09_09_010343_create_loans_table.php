@@ -12,9 +12,10 @@ class CreateLoansTable extends Migration
             $table->id();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
             $table->decimal('amount', 15, 2);
-            $table->decimal('interest_rate', 5, 2)->default(10.00); // Porcentaje de interés
+            $table->decimal('interest_rate', 5, 2)->default(3.00); // Porcentaje de interés
             $table->date('start_date');
             $table->date('end_date');
+            $table->decimal('totalapagar', 15, 2); // Nuevo campo para el total a pagar
             $table->timestamps();
         });
     }
