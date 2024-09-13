@@ -6,6 +6,9 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\BalanceController; // Añadido para el balance
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AhorroController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ActivityController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/loans/{id}', [LoanController::class, 'update'])->name('loans.update');
     Route::delete('/loans/{id}', [LoanController::class, 'destroy'])->name('loans.destroy');
     Route::get('/loans/manage/{loan}', [LoanController::class, 'manageSingle'])->name('loans.manageSingle');
+    Route::get('/loan/{clientId}/weekly-amount', [LoanController::class, 'getWeeklyAmount']);
 
     
     // Rutas para clientes
@@ -46,6 +50,18 @@ Route::middleware('auth')->group(function () {
 
     // Rutas para balance
     Route::get('/balance', [BalanceController::class, 'index'])->name('balance.index');
+
+    // Rutas para el registro de pagos
+    Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+    Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
+    
+
+    // Rutas para el registro de ahorros
+    Route::post('/ahorros', [AhorroController::class, 'store'])->name('ahorros.store');
+
+
+    // Rutas para el registro de actividad semanal
+    Route::post('/actividad', [ActivityController::class, 'store'])->name('actividad.store');
 });
 
 require __DIR__.'/auth.php';

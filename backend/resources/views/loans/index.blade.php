@@ -26,7 +26,6 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Monto Semanal</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Inicial</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Fin</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -39,11 +38,6 @@
                                         <td class="px-6 py-4 border-b">${{ number_format($loan->weekly_payment, 2) ?? '0.00' }}</td>
                                         <td class="px-6 py-4 border-b">{{ \Carbon\Carbon::parse($loan->start_date)->format('Y-m-d') }}</td>
                                         <td class="px-6 py-4 border-b">{{ \Carbon\Carbon::parse($loan->end_date)->format('Y-m-d') }}</td>
-                                        <td class="px-6 py-4 border-b">
-                                            <a href="{{ route('loans.manageSingle', $loan) }}" class="inline-flex items-center px-4 py-2 bg-green-500 text-black font-semibold text-sm rounded-md shadow-sm hover:bg-green-600">
-                                                {{ __('Administrar Préstamo') }}
-                                            </a>
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
